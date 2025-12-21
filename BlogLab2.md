@@ -38,7 +38,6 @@ Giải thích lại bài toán theo cách **dễ hiểu nhất** (không technic
 - Thống kê nhanh:
   - Số giao dịch sau lọc: 397,924
   - Số sản phẩm duy nhất: Khoảng 3,891 (sau lọc)
-  - 
   - Số khách hàng: 4,372
 
 ## 4. Kết quả Thử nghiệm và So sánh Apriori vs FP-Growth
@@ -69,6 +68,5 @@ Giải thích lại bài toán theo cách **dễ hiểu nhất** (không technic
 - **Độ dài trung bình itemset**: Tăng khi min_support giảm (từ 1.08 lên 2.20), vì các itemset dài hơn (3 mục) xuất hiện nhiều hơn.
 - **Bộ nhớ đỉnh (Peak Memory)**: Apriori tiêu thụ bộ nhớ nhiều hơn FP-Growth, đặc biệt ở min_support thấp (lên đến 28GB), trong khi FP-Growth ổn định ở ~1.2GB. Điều này cho thấy FP-Growth hiệu quả hơn về bộ nhớ cho dữ liệu lớn.
 - **Khuyến nghị**: Sử dụng FP-Growth cho min_support thấp để tiết kiệm bộ nhớ và thời gian. Apriori phù hợp cho min_support cao khi cần tốc độ nhanh.</content>
-<parameter name="filePath">/hdd3/nckh-AIAgent/tyanzuq/DataMining/shopping_cart_advanced_analysis/case_study.md
 
 
