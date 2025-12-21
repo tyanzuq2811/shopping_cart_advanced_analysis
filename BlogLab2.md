@@ -1,7 +1,7 @@
 # 📦 Case Study: Phân tích giỏ hàng nâng cao với Apriori và FP-Growth
 
 ## 👥 Thông tin Nhóm
-- **Nhóm:** Nhóm nghiên cứu AI Agent
+- **Nhóm:** 13
 - **Thành viên:**
   - Lê Tuấn Dũng
   - Lê Thị Ngọc Bích
