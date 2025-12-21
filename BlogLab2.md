@@ -39,61 +39,36 @@ Giải thích lại bài toán theo cách **dễ hiểu nhất** (không technic
   - Số giao dịch sau lọc: 397,924
   - Số sản phẩm duy nhất: Khoảng 3,891 (sau lọc)
   - 
-  - Số khách hàng: 4,372</content>
-<parameter name="filePath">/hdd3/nckh-AIAgent/tyanzuq/DataMining/shopping_cart_advanced_analysis/case_study.md
-## 4. Áp dụng Apriori
-**Tham số sử dụng:**
-- `min_support = 0.01` (1% giao dịch chứa tập mục)
+  - Số khách hàng: 4,372
+
+## 4. Kết quả Thử nghiệm và So sánh Apriori vs FP-Growth
+
+### Tham số Chung
 - `min_threshold = 1.0` (cho lift)
 - `max_len = 3` (độ dài tối đa của tập mục)
+- `metric = "lift"`
 
-### Thử nghiệm Tham số
-Để hiểu rõ tác động của từng tham số, chúng tôi thử nghiệm thay đổi giá trị và quan sát sự thay đổi kết quả.
+### Bảng So sánh Theo min_support
 
-#### 4.1. Thay đổi min_support
-**Giá trị mặc định:** `MIN_SUPPORT = 0.01`
-<img width="801" height="471" alt="image" src="https://github.com/user-attachments/assets/f72d6f31-d83b-4815-9ec6-550c5450a581" />
-<img width="798" height="464" alt="image" src="https://github.com/user-attachments/assets/98ab3119-a45f-4cfe-a8f5-aa4bde9e6930" />
+| min_support | Algorithm  | Runtime (s) | N_Itemsets | N_Rules | Avg_Itemset_Length | Peak Memory (MB) |
+|-------------|------------|-------------|------------|---------|---------------------|------------------|
+| 0.006      | Apriori   | 712.10     | 9968      | 30608  | 2.20               | 28854.57        |
+| 0.006      | FP-Growth | 397.20     | 9968      | 30608  | 2.20               | 1239.94         |
+| 0.008      | Apriori   | 182.37     | 4002      | 9504   | 1.96               | 28854.57        |
+| 0.008      | FP-Growth | 142.59     | 4002      | 9504   | 1.96               | 1239.94         |
+| 0.01       | Apriori   | 19.61      | 2120      | 3856   | 1.76               | 17149.53        |
+| 0.01       | FP-Growth | 60.87      | 2120      | 3856   | 1.76               | 1239.94         |
+| 0.02       | Apriori   | 4.45       | 400       | 218    | 1.26               | 2297.88         |
+| 0.02       | FP-Growth | 10.79      | 400       | 218    | 1.26               | 1239.94         |
+| 0.03       | Apriori   | 0.55       | 145       | 22     | 1.08               | 459.79          |
+| 0.03       | FP-Growth | 4.96       | 145       | 22     | 1.08               | 1239.94         |
 
+### Nhận xét Khi min_support Giảm
+- **Thời gian chạy**: Khi min_support giảm (từ 0.03 xuống 0.006), thời gian chạy của cả hai thuật toán tăng đáng kể. Apriori thường nhanh hơn ở min_support cao (0.02-0.03), nhưng chậm hơn ở min_support thấp (0.006-0.008). FP-Growth ổn định hơn về thời gian tương đối.
+- **Số lượng itemsets và rules**: Giảm min_support làm tăng số itemsets và rules (từ 145 itemsets ở 0.03 lên 9968 ở 0.006), vì nhiều tập mục hiếm hơn được phát hiện. Cả hai thuật toán cho cùng số lượng kết quả.
+- **Độ dài trung bình itemset**: Tăng khi min_support giảm (từ 1.08 lên 2.20), vì các itemset dài hơn (3 mục) xuất hiện nhiều hơn.
+- **Bộ nhớ đỉnh (Peak Memory)**: Apriori tiêu thụ bộ nhớ nhiều hơn FP-Growth, đặc biệt ở min_support thấp (lên đến 28GB), trong khi FP-Growth ổn định ở ~1.2GB. Điều này cho thấy FP-Growth hiệu quả hơn về bộ nhớ cho dữ liệu lớn.
+- **Khuyến nghị**: Sử dụng FP-Growth cho min_support thấp để tiết kiệm bộ nhớ và thời gian. Apriori phù hợp cho min_support cao khi cần tốc độ nhanh.</content>
+<parameter name="filePath">/hdd3/nckh-AIAgent/tyanzuq/DataMining/shopping_cart_advanced_analysis/case_study.md
 
-**Giảm `min_support` xuống 0.008**
-
-- Thời gian chạy: **37.28 giây**
-- Số tập mục phổ biến: **4,002**
-
-→ Số tập mục phổ biến tăng gần gấp đôi so với giá trị mặc định, cho phép phát hiện thêm nhiều mối quan hệ tiềm năng. Tuy nhiên, chi phí tính toán tăng và nguy cơ xuất hiện nhiễu cũng cao hơn.
-
----
-
-**Giảm sâu `min_support` xuống 0.006**
-
-- Thời gian chạy: **201.44 giây**
-- Số tập mục phổ biến: **9,968**
-
-→ Số tập mục và thời gian chạy tăng đột biến, cho thấy Apriori trở nên kém hiệu quả khi ngưỡng support quá thấp. Mặc dù phát hiện được nhiều pattern hiếm, kết quả dễ bị nhiễu và khó áp dụng trong thực tế.
-
----
-
-**Tăng `min_support` lên 0.02**
-
-- Thời gian chạy: **2.77 giây**
-- Số tập mục phổ biến: **400**
-
-→ Số tập mục giảm mạnh, tập trung vào các sản phẩm phổ biến nhất. Kết quả sạch hơn và thời gian xử lý nhanh, phù hợp cho các bài toán quy mô lớn.
-
----
-
-**Tăng `min_support` lên 0.03**
-
-- Thời gian chạy: **0.44 giây**
-- Số tập mục phổ biến: **145**
-
-→ Chỉ giữ lại các tập mục xuất hiện rất thường xuyên. Kết quả đơn giản, dễ diễn giải nhưng có thể bỏ sót nhiều mối quan hệ tiềm năng.
-
----
-
-**Nhận xét chung:**  
-`min_support` là tham số ảnh hưởng mạnh nhất đến số lượng tập mục phổ biến và thời gian chạy của thuật toán. Giá trị quá thấp gây bùng nổ tập mục và chi phí tính toán cao, trong khi giá trị quá cao làm mất nhiều thông tin có giá trị.
-
----
 
