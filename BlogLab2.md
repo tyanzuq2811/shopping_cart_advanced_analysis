@@ -67,15 +67,29 @@ Giải thích lại bài toán theo cách **dễ hiểu nhất** (không technic
 - **Số lượng itemsets và rules**: Giảm min_support làm tăng số itemsets và rules (từ 145 itemsets ở 0.03 lên 9968 ở 0.006), vì nhiều tập mục hiếm hơn được phát hiện. Cả hai thuật toán cho cùng số lượng kết quả.
 - **Độ dài trung bình itemset**: Tăng khi min_support giảm (từ 1.08 lên 2.20), vì các itemset dài hơn (3 mục) xuất hiện nhiều hơn.
 - **Bộ nhớ đỉnh (Peak Memory)**: Apriori tiêu thụ bộ nhớ nhiều hơn FP-Growth, đặc biệt ở min_support thấp (lên đến 28GB), trong khi FP-Growth ổn định ở ~1.2GB. Điều này cho thấy FP-Growth hiệu quả hơn về bộ nhớ cho dữ liệu lớn.
-- **Khuyến nghị**: Sử dụng FP-Growth cho min_support thấp để tiết kiệm bộ nhớ và thời gian. Apriori phù hợp cho min_support cao khi cần tốc độ nhanh.</content>
-## 5. Trực quan hóa (giá trị mặc định)
+- **Khuyến nghị**: Sử dụng FP-Growth cho min_support thấp để tiết kiệm bộ nhớ và thời gian. Apriori phù hợp cho min_support cao khi cần tốc độ nhanh.
+
+### Độ Nhạy Tham số và Giới hạn Thuật toán
+- **Độ nhạy với min_support**: Cả hai thuật toán rất nhạy với min_support. Giảm min_support từ 0.03 xuống 0.006 làm tăng thời gian chạy gấp 1000 lần (Apriori) và gấp 80 lần (FP-Growth), số itemsets tăng 70 lần, và bộ nhớ Apriori tăng 60 lần. Điều này cho thấy cần chọn min_support cẩn thận để cân bằng giữa chất lượng luật và hiệu suất.
+- **Giới hạn Apriori**: Tốn nhiều bộ nhớ khi min_support thấp do sinh candidate sets lớn, chậm với dữ liệu lớn (>1M giao dịch) vì kiểm tra từng candidate. Phù hợp cho min_support cao và dữ liệu nhỏ.
+- **Giới hạn FP-Growth**: Hiệu quả hơn về bộ nhớ (ổn định ~1GB), nhưng có thể chậm nếu cây FP-tree lớn. Phù hợp cho dữ liệu lớn và min_support thấp, nhưng yêu cầu đủ RAM để xây cây.</content>
+## 5. Trực quan hóa Kết quả
+
+### Bar Chart Histogram Phân bố Support và Lift
 <img width="1040" height="734" alt="image" src="https://github.com/user-attachments/assets/3f28a9d1-4cb9-45b8-82bb-26517fcee0a7" />
-Bar Chart Histogram: Giải thích về phân bố support/lift liên quan đến hành vi mua sắm, và không có khác biệt lớn giữa hai thuật toán vì kết quả luật giống nhau.
+- **Ý nghĩa**: Histogram cho thấy phân bố tần suất của support (tỷ lệ giao dịch chứa luật) và lift (độ mạnh của mối liên kết) trong các luật. Support thấp cho thấy luật hiếm, lift cao cho thấy mối liên kết mạnh, giúp nhận diện sản phẩm thường mua cùng nhau.
+- **So sánh thuật toán**: Không có khác biệt đáng kể vì cả hai sinh ra cùng số lượng luật với cùng giá trị metrics.
+
+### Scatter Plot Overlay Support vs Confidence
 <img width="895" height="552" alt="image" src="https://github.com/user-attachments/assets/f5fab020-a337-470c-ae6d-7b24369d0d03" />
-Scatter Plot Overlay: Mô tả mối quan hệ support-confidence phản ánh luật mạnh, và overlay cho thấy sự tương đồng nhưng FP-Growth hiệu quả hơn.
+- **Ý nghĩa**: Scatter plot cho thấy mối quan hệ giữa support (tần suất) và confidence (độ tin cậy) của luật. Các điểm tập trung ở góc trên phải cho thấy luật mạnh (cả support và confidence cao), phản ánh hành vi mua sắm phổ biến và đáng tin cậy.
+- **So sánh thuật toán**: Overlay cho thấy hai thuật toán sinh ra luật tương tự, nhưng FP-Growth xử lý nhanh hơn với ít bộ nhớ hơn.
+
+### Network Graph Quan hệ Sản phẩm
 <img width="1030" height="783" alt="image" src="https://github.com/user-attachments/assets/b7b6e12c-d23d-46b5-9071-0176a829099e" />
 <img width="1024" height="698" alt="image" src="https://github.com/user-attachments/assets/12a3713c-4f24-42da-abeb-88ddcef8e817" />
-Network Graph: Thể hiện quan hệ sản phẩm trong luật, hỗ trợ cross-selling, và khác biệt ở hiệu quả xử lý.
+- **Ý nghĩa**: Network graph biểu diễn mối quan hệ antecedents → consequents trong luật, như "mua A thì mua B". Điều này giúp trực quan hóa chuỗi mua sắm, hỗ trợ đề xuất cross-selling.
+- **So sánh thuật toán**: Cả hai cho ra network tương tự vì luật giống nhau, nhưng FP-Growth hiệu quả hơn cho dữ liệu lớn.
 ## 6. Insight từ kết quả
 **Insight #1:**  Các loại HERB MARKER (que đánh dấu thảo mộc) có xu hướng được mua cùng nhau 
 
