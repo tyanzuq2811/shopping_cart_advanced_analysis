@@ -90,6 +90,8 @@ Giải thích lại bài toán theo cách **dễ hiểu nhất** (không technic
 <img width="1024" height="698" alt="image" src="https://github.com/user-attachments/assets/12a3713c-4f24-42da-abeb-88ddcef8e817" />
 - **Ý nghĩa**: Network graph biểu diễn mối quan hệ antecedents → consequents trong luật, như "mua A thì mua B". Điều này giúp trực quan hóa chuỗi mua sắm, hỗ trợ đề xuất cross-selling.
 - **So sánh thuật toán**: Cả hai cho ra network tương tự vì luật giống nhau, nhưng FP-Growth hiệu quả hơn cho dữ liệu lớn.
+
+
 ## 6. Insight từ kết quả
 **Insight #1:**  Các loại HERB MARKER (que đánh dấu thảo mộc) có xu hướng được mua cùng nhau 
 
