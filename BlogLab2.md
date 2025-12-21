@@ -68,8 +68,15 @@ Giải thích lại bài toán theo cách **dễ hiểu nhất** (không technic
 - **Độ dài trung bình itemset**: Tăng khi min_support giảm (từ 1.08 lên 2.20), vì các itemset dài hơn (3 mục) xuất hiện nhiều hơn.
 - **Bộ nhớ đỉnh (Peak Memory)**: Apriori tiêu thụ bộ nhớ nhiều hơn FP-Growth, đặc biệt ở min_support thấp (lên đến 28GB), trong khi FP-Growth ổn định ở ~1.2GB. Điều này cho thấy FP-Growth hiệu quả hơn về bộ nhớ cho dữ liệu lớn.
 - **Khuyến nghị**: Sử dụng FP-Growth cho min_support thấp để tiết kiệm bộ nhớ và thời gian. Apriori phù hợp cho min_support cao khi cần tốc độ nhanh.</content>
-
-## 6. Insight từ Kết quả
+## 5. Trực quan hóa (giá trị mặc định)
+<img width="1040" height="734" alt="image" src="https://github.com/user-attachments/assets/3f28a9d1-4cb9-45b8-82bb-26517fcee0a7" />
+Bar Chart Histogram: Giải thích về phân bố support/lift liên quan đến hành vi mua sắm, và không có khác biệt lớn giữa hai thuật toán vì kết quả luật giống nhau.
+<img width="895" height="552" alt="image" src="https://github.com/user-attachments/assets/f5fab020-a337-470c-ae6d-7b24369d0d03" />
+Scatter Plot Overlay: Mô tả mối quan hệ support-confidence phản ánh luật mạnh, và overlay cho thấy sự tương đồng nhưng FP-Growth hiệu quả hơn.
+<img width="1030" height="783" alt="image" src="https://github.com/user-attachments/assets/b7b6e12c-d23d-46b5-9071-0176a829099e" />
+<img width="1024" height="698" alt="image" src="https://github.com/user-attachments/assets/12a3713c-4f24-42da-abeb-88ddcef8e817" />
+Network Graph: Thể hiện quan hệ sản phẩm trong luật, hỗ trợ cross-selling, và khác biệt ở hiệu quả xử lý.
+## 6. Insight từ kết quả
 **Insight #1:**  Các loại HERB MARKER (que đánh dấu thảo mộc) có xu hướng được mua cùng nhau 
 
 Nhiều luật cho thấy khách hàng  thường mua kèm HERB MARKER THYME, CHIVES, ROSEMARY, PARSLEY, BASIL và MINT với confidence rất cao (≈ 90%) và lift lớn (> 70)
