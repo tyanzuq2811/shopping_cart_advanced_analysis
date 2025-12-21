@@ -69,4 +69,63 @@ Giải thích lại bài toán theo cách **dễ hiểu nhất** (không technic
 - **Bộ nhớ đỉnh (Peak Memory)**: Apriori tiêu thụ bộ nhớ nhiều hơn FP-Growth, đặc biệt ở min_support thấp (lên đến 28GB), trong khi FP-Growth ổn định ở ~1.2GB. Điều này cho thấy FP-Growth hiệu quả hơn về bộ nhớ cho dữ liệu lớn.
 - **Khuyến nghị**: Sử dụng FP-Growth cho min_support thấp để tiết kiệm bộ nhớ và thời gian. Apriori phù hợp cho min_support cao khi cần tốc độ nhanh.</content>
 
+## 6. Insight từ Kết quả
+**Insight #1:**  Các loại HERB MARKER (que đánh dấu thảo mộc) có xu hướng được mua cùng nhau 
 
+Nhiều luật cho thấy khách hàng  thường mua kèm HERB MARKER THYME, CHIVES, ROSEMARY, PARSLEY, BASIL và MINT với confidence rất cao (≈ 90%) và lift lớn (> 70)
+
+Diễn giải: 
+Khách hàng không mua HERB MARKER một cách đơn lẻ mà thường mua nhiều loại HERB MARKER cùng lúc, phục vụ cho việc phân biệt các loại cây/nguyên liệu thảo mộc. 
+
+**Insight #2:** Khách hàng có xu hướng mua trọn bộ sản phẩm cùng phong cách REGENCY
+
+Các luật cho thấy mối liên hệ rất mạnh giữa: REGENCY SUGAR BOWL GREEN, REGENCY MILK JUG PINK, REGENCY TEAPOT ROSES, REGENCY TEA PLATE, REGENCY TEACUP AND SAUCER Với: Confidence cao (≈ 47–96%), Lift rất lớn (≈ 10–57)
+
+Diễn giải:
+Khi khách đã chọn một sản phẩm thuộc dòng REGENCY, khả năng rất cao họ sẽ mua thêm các sản phẩm REGENCY khác để đồng bộ bộ trà / bộ bàn ăn.
+
+**Insight #3:** Hành vi mua mang tính bộ sưu tập – cùng thiết kế nhưng khác màu
+
+Các luật cho thấy:
+
+- REGENCY TEACUP AND SAUCER: các màu GREEN, PINK, ROSES thường được mua cùng nhau với Confidence cao (≈ 70%), Lift lớn (≈ 15)
+
+- REGENCY TEA PLATE: các màu GREEN, PINK, ROSES thường được mua cùng nhau với Confidence cao (≈ 75%), Lift lớn (≈ 45)
+
+Diễn giải:
+Khách hàng mua sản phẩm không đơn thuần vì nhu cầu sử dụng, mà vì tính thẩm mỹ: sự đồng nhất về thiết kế nhưng đa đạng màu sắc.
+
+**Insight #4:** Khách hàng có xu hướng mua trọn bộ sản phẩm dòng POPPY'S PLAYHOUSE  
+
+Các luật cho thấy mối liên hệ rất mạnh giữa: POPPY'S PLAYHOUSE LIVINGROOM, BEDROOM, KITCHEN Với: Confidence cao (≈ 75%), Lift rất lớn (≈ 40)
+
+Diễn giải: Khi khách đã chọn một sản phẩm thuộc dòng POPPY'S PLAYHOUSE, khả năng rất cao họ sẽ mua thêm các sản phẩm POPPY'S PLAYHOUSE khác để đủ bộ sưu tập.
+
+**Insight #5:** Khách hàng có xu hướng mua trọn bộ sản phẩm dòng WOODEN CHRISTMAS SCANDINAVIAN
+
+Các luật cho thấy mối liên hệ rất mạnh giữa: WOODEN CHRISTMAS SCANDINAVIAN HEART, STAR, TREE với: Confidence cao (≈ 70%), Lift lớn (≈ 30)
+
+Diễn giải: Khi khách mua đồ trang trí giáng sinh thì thường mua đồng bộ cả cây, ngôi sao và trái tim.
+
+## 7. Kết luận & Đề xuất Kinh doanh
+**Đề xuất 1:** Bán combo theo bộ sưu tập
+
+- Combo REGENCY: Sugar Bowl + Milk Jug + TEAPOT
+- Combo POPPY'S PLAYHOUSE: LIVINGROOM + BEDROOM + KITCHEN
+
+**Đề xuất 2:** Bán combo theo cùng thiết kế nhưng khác màu 
+
+- Combo REGENCY TEACUP AND SAUCER: các màu GREEN + PINK + ROSES
+- Combo REGENCY TEA PLATE: các màu GREEN + PINK + ROSES
+
+**Đề xuất 3:** Xếp các sản phẩm theo phong cách REGENCY cùng một khu vực
+bao gồm các sản phẩm
+- REGENCY TEACUP AND SAUCER
+- REGENCY TEA PLATE
+- REGENCY SUGAR BOWL GREEN
+- REGENCY MILK JUG PINK
+- REGENCY TEAPOT ROSES
+
+**Đề xuất 4:** Bán combo WOODEN CHRISTMAS SCANDINAVIAN khi gần Giáng sinh 
+
+- Combo WOODEN CHRISTMAS SCANDINAVIAN: HEART + STAR + TREE
