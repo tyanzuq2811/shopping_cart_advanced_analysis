@@ -1,6 +1,6 @@
-# 📦 Case Study: Phân tích giỏ hàng nâng cao với Apriori và FP-Growth
+# Case Study: Phân tích giỏ hàng nâng cao với Apriori và FP-Growth
 
-## 👥 Thông tin Nhóm
+## Thông tin Nhóm
 - **Nhóm:** 13
 - **Thành viên:**
   - Lê Tuấn Dũng
