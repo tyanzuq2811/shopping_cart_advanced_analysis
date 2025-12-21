@@ -1,3 +1,4 @@
+from tkinter import FALSE
 import papermill as pm
 import os
 
@@ -11,11 +12,11 @@ pm.execute_notebook(
         DATA_PATH="data/raw/online_retail.csv",
         COUNTRY="United Kingdom",
         OUTPUT_DIR="data/processed",
-        PLOT_REVENUE=True,         # tắt bớt plot khi chạy batch
-        PLOT_TIME_PATTERNS=True,
-        PLOT_PRODUCTS=True,
-        PLOT_CUSTOMERS=True,
-        PLOT_RFM=True,
+        PLOT_REVENUE=FALSE,         # tắt bớt plot khi chạy batch
+        PLOT_TIME_PATTERNS=FALSE,
+        PLOT_PRODUCTS=FALSE,
+        PLOT_CUSTOMERS=FALSE,
+        PLOT_RFM=FALSE,
     ),
     kernel_name="python3",
 )

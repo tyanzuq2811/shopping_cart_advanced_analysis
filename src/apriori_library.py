@@ -8,6 +8,7 @@ and association rule analysis for shopping cart.
 
 import datetime as dt
 import os
+from typing import Optional, Union
 import time
 
 import matplotlib.pyplot as plt
@@ -470,7 +471,7 @@ class FPGrowthMiner:
 
         Args:
             min_support (float): Ngưỡng support tối thiểu.
-            max_len (int | None): Độ dài tối đa của itemset.
+            max_len (Optional[int]): Độ dài tối đa của itemset.
             use_colnames (bool): True nếu muốn itemsets dùng tên cột.
 
         Returns:
@@ -846,8 +847,8 @@ class DataVisualizer:
         self,
         frequent_itemsets: pd.DataFrame,
         top_n: int = 20,
-        min_len: int | None = None,
-        max_len: int | None = None,
+        min_len: Optional[int] = None,
+        max_len: Optional[int] = None,
         title: str = "Top frequent itemsets theo support",
     ):
         """
@@ -1144,8 +1145,8 @@ class DataVisualizer:
     def plot_rules_network(
         self,
         rules_df: pd.DataFrame,
-        max_rules: int | None = 100,
-        min_lift: float | None = None,
+        max_rules: Optional[int] = 100,
+        min_lift: Optional[float] = None,
         title: str = "Mạng lưới các luật kết hợp (Arrow: antecedent → consequent)",
         figsize: tuple = (12, 8),
     ):
