@@ -71,6 +71,9 @@ Thí nghiệm tạo ra luật với weighted support, ưu tiên giao dịch có 
 ### Phân Tích Độ Nhạy
 ### Phân Tích Độ Nhạy
 - **Biểu đồ số lượng luật** (ghi chú: Xem notebook cell 12 - Vẽ biểu đồ số lượng luật theo tham số):
+<img width="858" height="548" alt="image" src="https://github.com/user-attachments/assets/e343b4da-9b3a-4110-913c-9d7a1eb289dc" />
+<img width="862" height="551" alt="image" src="https://github.com/user-attachments/assets/97426a79-e443-4133-9595-dd762e7ec909" />
+
   - **Luật thường**: Biểu đồ line plot với x='min_support', y='num_rules', hue='min_confidence', style='min_lift'. Đường cong giảm mạnh khi tăng min_support (từ 0.01: ~3,300 luật xuống 0.1: 0 luật), phản ánh độ nhạy cao của tham số này. Hue theo min_confidence (0.1-0.5) và style theo min_lift (1.0-2.0) cho thấy confidence và lift ảnh hưởng ít hơn, chủ yếu làm mịn đường cong.
   - **Luật có trọng số**: Biểu đồ tương tự với x='min_weighted_support', y='num_rules', hue='min_weighted_lift'. Số luật ít hơn (ví dụ, 1,245 luật tại 0.01 so với 3,319 của luật thường), đường cong giảm nhanh hơn do weighted support nghiêm ngặt hơn, ưu tiên giao dịch giá trị cao. Độ nhạy cao với min_weighted_support, lift ảnh hưởng qua hue (1.0-2.0).
   - **So sánh độ nhạy**: Luật thường nhạy cảm với min_support (thay đổi lớn số luật), luật weighted nhạy cảm hơn với giá trị kinh doanh (ít luật nhưng chất lượng cao hơn). Thêm scatter plot hoặc heatmap có thể trực quan hóa tương quan giữa tham số (ví dụ, heatmap cho num_rules vs min_support và min_confidence).
