@@ -77,7 +77,12 @@ Thí nghiệm tạo ra luật với weighted support, ưu tiên giao dịch có 
   - **Luật thường**: Biểu đồ line plot với x='min_support', y='num_rules', hue='min_confidence', style='min_lift'. Đường cong giảm mạnh khi tăng min_support (từ 0.01: ~3,300 luật xuống 0.1: 0 luật), phản ánh độ nhạy cao của tham số này. Hue theo min_confidence (0.1-0.5) và style theo min_lift (1.0-2.0) cho thấy confidence và lift ảnh hưởng ít hơn, chủ yếu làm mịn đường cong.
   - **Luật có trọng số**: Biểu đồ tương tự với x='min_weighted_support', y='num_rules', hue='min_weighted_lift'. Số luật ít hơn (ví dụ, 1,245 luật tại 0.01 so với 3,319 của luật thường), đường cong giảm nhanh hơn do weighted support nghiêm ngặt hơn, ưu tiên giao dịch giá trị cao. Độ nhạy cao với min_weighted_support, lift ảnh hưởng qua hue (1.0-2.0).
   - **So sánh độ nhạy**: Luật thường nhạy cảm với min_support (thay đổi lớn số luật), luật weighted nhạy cảm hơn với giá trị kinh doanh (ít luật nhưng chất lượng cao hơn). Thêm scatter plot hoặc heatmap có thể trực quan hóa tương quan giữa tham số (ví dụ, heatmap cho num_rules vs min_support và min_confidence).
-  - **Ghi chú trực quan**: Sử dụng seaborn lineplot để so sánh dễ dàng. Thêm biểu đồ scatter hoặc heatmap nếu cần phân tích tương quan tham số (có thể thêm cell mới trong notebook).
+<img width="724" height="548" alt="image" src="https://github.com/user-attachments/assets/033c0e08-1dab-4365-81a1-aae5b056bb63" />
+<img width="714" height="550" alt="image" src="https://github.com/user-attachments/assets/3d2d97cf-bc90-4648-a1f5-7232ef3bc058" />
+
+  - **Heatmap cho luật thường** (notebook cell 13): Pivot table trung bình num_rules theo min_support (hàng) và min_confidence (cột), màu Blues (sáng = nhiều luật, tối = ít luật). Annotations hiển thị số chính xác. Ví dụ, vùng min_support=0.01 và min_confidence=0.1 có ~3,300 luật (rất sáng), giảm dần khi tăng tham số. Cho thấy min_support ảnh hưởng mạnh nhất, min_confidence ít hơn.
+  - **Heatmap cho luật có trọng số** (notebook cell 13): Tương tự, theo min_weighted_support và min_weighted_lift, màu Reds. Vùng min_weighted_support=0.01 và min_weighted_lift=1.0 có ~1,245 luật (ít hơn regular), giảm nhanh hơn do weighted support nghiêm ngặt. Phản ánh ưu tiên giá trị kinh doanh, độ nhạy cao với support hơn lift.
+  - **So sánh heatmap**: Regular heatmap có vùng sáng rộng hơn (nhiều luật), weighted heatmap tối hơn và giảm nhanh, nhấn mạnh sự khác biệt trong độ nhạy tham số giữa hai phương pháp.
 
 - **Cấu trúc sản phẩm** (ghi chú: Xem notebook cell 13):
   - Luật thường tập trung vào sản phẩm phổ biến.
