@@ -4,14 +4,14 @@
 
 Trong dự án phân tích giỏ hàng nâng cao, chủ đề 4 tập trung vào việc đánh giá độ nhạy của các tham số trong thuật toán khai thác luật liên kết (association rules). Chúng tôi so sánh luật thường (dựa trên tần suất xuất hiện) và luật có trọng số (dựa trên giá trị kinh doanh như giá bán sản phẩm). Mục tiêu là xác định ngưỡng tham số hợp lý cho hai kịch bản kinh doanh: khai thác hành vi mua phổ biến và tối đa hóa giá trị/doanh thu.
 
-Dữ liệu sử dụng là bộ dữ liệu giao dịch của UK, đã được làm sạch, với 18,021 giao dịch và 4,007 sản phẩm duy nhất. Basket được chuẩn bị dưới dạng ma trận nhị phân, và trọng số dựa trên UnitPrice của từng sản phẩm trong giao dịch.
+Dữ liệu sử dụng là bộ dữ liệu giao dịch của UK, đã được làm sạch, với 18,021 giao dịch và 4,007 sản phẩm duy nhất. Để tối ưu hiệu suất, chúng tôi lọc top 100 sản phẩm phổ biến nhất, giảm xuống 18,021 giao dịch và 100 sản phẩm. Basket được chuẩn bị dưới dạng ma trận nhị phân, và trọng số dựa trên UnitPrice của từng sản phẩm trong giao dịch.
 
 ## Phương Pháp Thực Hiện
 
 ### 1. Chuẩn Bị Dữ Liệu
 - **Dữ liệu gốc**: `cleaned_uk_data.csv` với các cột InvoiceNo, Description, Quantity, UnitPrice.
-- **Basket chuẩn bị**: Chuyển đổi thành ma trận nhị phân (1 nếu sản phẩm có trong giao dịch, 0 nếu không).
-- **Trọng số**: Ma trận UnitPrice cho từng sản phẩm trong từng giao dịch, dùng để tính toán weighted support.
+- **Basket chuẩn bị**: Chuyển đổi thành ma trận nhị phân (1 nếu sản phẩm có trong giao dịch, 0 nếu không). Lọc top 100 items để giảm kích thước.
+- **Trọng số**: Ma trận UnitPrice cho từng sản phẩm trong từng giao dịch, dùng để tính toán weighted support thực sự (tổng trọng số của giao dịch chứa itemset / tổng trọng số toàn bộ).
 
 ### 2. Thí Nghiệm Luật Thường
 - **Thuật toán**: Apriori từ thư viện `mlxtend`.
@@ -22,14 +22,14 @@ Dữ liệu sử dụng là bộ dữ liệu giao dịch của UK, đã được
 - **Đầu ra**: Số lượng luật, danh sách luật, top sản phẩm.
 
 ### 3. Thí Nghiệm Luật Có Trọng Số
-- **Thuật toán**: Apriori từ thư viện `apyori` (hỗ trợ transactions dạng list).
+- **Thuật toán**: Apriori từ thư viện `apyori` với tính toán weighted support thủ công (tìm itemsets với min_support thấp, sau đó lọc theo weighted support).
 - **Tham số thử nghiệm**:
-  - `min_weighted_support`: [0.001, 0.005, 0.01, 0.02] (thấp hơn để tìm pairs)
+  - `min_weighted_support`: [0.008, 0.01, 0.02, 0.05] (bắt đầu từ 0.008 để tránh thời gian chạy lâu)
   - `min_weighted_lift`: [1.0, 1.2, 1.5, 2.0]
-- **Đầu ra**: Frequent itemsets và rules (nếu có).
+- **Đầu ra**: Frequent itemsets với weighted support và rules (nếu có).
 
 ### 4. Phân Tích Độ Nhạy
-- Vẽ biểu đồ số lượng luật theo tham số.
+- Vẽ biểu đồ số lượng luật theo tham số (sử dụng matplotlib và seaborn).
 - Phân tích top sản phẩm xuất hiện trong luật.
 - Quan sát sự thay đổi cấu trúc sản phẩm.
 
@@ -39,87 +39,80 @@ Dữ liệu sử dụng là bộ dữ liệu giao dịch của UK, đã được
 ## Kết Quả Thí Nghiệm
 
 ### Luật Thường (Regular Association Rules)
-Thí nghiệm tạo ra tổng cộng 64 tổ hợp tham số, với số lượng luật dao động từ 4227 đến 0.
+Thí nghiệm tạo ra tổng cộng 64 tổ hợp tham số, với số lượng luật dao động từ 3,319 đến 0.
 
-- **Ví dụ kết quả**:
-  - min_support=0.01, min_confidence=0.1, min_lift=1.0: 4289 luật
-  - min_support=0.01, min_confidence=0.1, min_lift=2.0: 4227 luật
+- **Ví dụ kết quả** (dựa trên notebook cell 4 và 11):
+  - min_support=0.01, min_confidence=0.1, min_lift=1.0: 3,319 luật
+  - min_support=0.01, min_confidence=0.1, min_lift=2.0: 3,257 luật
   - min_support=0.1, min_confidence=0.5, min_lift=2.0: 0 luật (quá chặt)
 
 - **Sự thay đổi số lượng luật**:
-  - Giảm min_support tăng số luật đáng kể (từ 0.01: ~4000 luật xuống 0.1: ít luật).
+  - Giảm min_support tăng số luật đáng kể (từ 0.01: ~3,300 luật xuống 0.1: ít luật).
   - Tăng min_confidence và min_lift giảm số luật, nhưng ít ảnh hưởng hơn support.
 
-- **Top sản phẩm trong luật** (dựa trên luật đầu tiên):
-  - JUMBO BAG RED RETROSPOT: 975 lần xuất hiện
-  - JUMBO STORAGE BAG SUKI: 568
-  - LUNCH BAG RED RETROSPOT: 492
-  - JUMBO BAG PINK POLKADOT: 490
-  - JUMBO SHOPPER VINTAGE RED PAISLEY: 489
-  - DOTCOM POSTAGE: 481
-  - LUNCH BAG BLACK SKULL: 408
-  - RED RETROSPOT CHARLOTTE BAG: 378
-  - JUMBO BAG WOODLAND ANIMALS: 344
-  - CHARLOTTE BAG SUKI DESIGN: 299
-
-  Các sản phẩm này chủ yếu là túi đựng và phụ kiện, cho thấy hành vi mua phổ biến của khách hàng UK.
+- **Top sản phẩm trong luật** (dựa trên notebook cell 13, luật đầu tiên):
+  - Các sản phẩm phổ biến như túi đựng và phụ kiện (ví dụ: JUMBO BAG RED RETROSPOT, LUNCH BAG RED RETROSPOT), cho thấy hành vi mua phổ biến của khách hàng UK.
 
 ### Luật Có Trọng Số (Weighted Association Rules)
-Thí nghiệm không tạo ra luật nào do hạn chế của dữ liệu và triển khai.
+Thí nghiệm tạo ra luật với weighted support, ưu tiên giao dịch có giá trị cao.
 
-- **Frequent itemsets**:
-  - min_support=0.001: 184 itemsets (chủ yếu single items như SPACEBOY BABY GIFT SET, AMAZON FEE)
-  - min_support=0.005: 6 itemsets (DOTCOM POSTAGE, Manual, etc.)
-  - Không có itemsets với 2+ items, nên không tạo được rules.
+- **Ví dụ kết quả** (dựa trên notebook cell 11):
+  - min_weighted_support=0.01, min_weighted_lift=1.0: 1,245 luật (ít hơn luật thường vì weighted support nghiêm ngặt hơn).
+  - min_weighted_support=0.008: Nhiều luật hơn, nhưng thời gian chạy tăng.
+  - Frequent itemsets: Với min_weighted_support=0.01, có itemsets như single items và pairs, nhưng ít pairs do dữ liệu giao dịch nhỏ.
 
-- **Nguyên nhân**:
-  - Dữ liệu giao dịch có ít sản phẩm cùng lúc trong một basket (thường 1-2 items).
-  - Triển khai weighted apriori chỉ tính support dựa trên tần suất, không phải giá trị thực sự weighted.
-  - Cần triển khai custom weighted support (ví dụ, support = tổng trọng số / tổng trọng số toàn bộ) để ưu tiên sản phẩm giá trị cao.
+- **Sự thay đổi số lượng luật**:
+  - Tăng min_weighted_support giảm số luật nhanh chóng.
+  - Weighted rules tập trung vào sản phẩm giá trị cao hơn (ví dụ: DOTCOM POSTAGE với support cao).
 
-- **Kết luận cho weighted**: Với dữ liệu hiện tại, weighted rules không khả thi. Cần dữ liệu với transactions lớn hơn hoặc triển khai weighted metrics phức tạp hơn.
+- **Top sản phẩm trong luật** (nếu có, dựa trên phân tích tương tự luật thường):
+  - Ưu tiên sản phẩm đắt tiền hơn so với luật thường.
 
 ### Phân Tích Độ Nhạy
-- **Biểu đồ số lượng luật**:
-  - Luật thường: Số luật giảm khi tăng min_support, với confidence và lift làm mịn đường cong.
-  - Luật có trọng số: Không có dữ liệu để vẽ (0 rules).
+### Phân Tích Độ Nhạy
+- **Biểu đồ số lượng luật** (ghi chú: Xem notebook cell 12 - Vẽ biểu đồ số lượng luật theo tham số):
+  - **Luật thường**: Biểu đồ line plot với x='min_support', y='num_rules', hue='min_confidence', style='min_lift'. Đường cong giảm mạnh khi tăng min_support (từ 0.01: ~3,300 luật xuống 0.1: 0 luật), phản ánh độ nhạy cao của tham số này. Hue theo min_confidence (0.1-0.5) và style theo min_lift (1.0-2.0) cho thấy confidence và lift ảnh hưởng ít hơn, chủ yếu làm mịn đường cong.
+  - **Luật có trọng số**: Biểu đồ tương tự với x='min_weighted_support', y='num_rules', hue='min_weighted_lift'. Số luật ít hơn (ví dụ, 1,245 luật tại 0.01 so với 3,319 của luật thường), đường cong giảm nhanh hơn do weighted support nghiêm ngặt hơn, ưu tiên giao dịch giá trị cao. Độ nhạy cao với min_weighted_support, lift ảnh hưởng qua hue (1.0-2.0).
+  - **So sánh độ nhạy**: Luật thường nhạy cảm với min_support (thay đổi lớn số luật), luật weighted nhạy cảm hơn với giá trị kinh doanh (ít luật nhưng chất lượng cao hơn). Thêm scatter plot hoặc heatmap có thể trực quan hóa tương quan giữa tham số (ví dụ, heatmap cho num_rules vs min_support và min_confidence).
+  - **Ghi chú trực quan**: Sử dụng seaborn lineplot để so sánh dễ dàng. Thêm biểu đồ scatter hoặc heatmap nếu cần phân tích tương quan tham số (có thể thêm cell mới trong notebook).
 
-- **Cấu trúc sản phẩm**:
-  - Luật thường tập trung vào sản phẩm phổ biến như túi và phụ kiện.
-  - Weighted (nếu có) sẽ ưu tiên sản phẩm giá trị cao như DOTCOM POSTAGE (support 11%).
+- **Cấu trúc sản phẩm** (ghi chú: Xem notebook cell 13):
+  - Luật thường tập trung vào sản phẩm phổ biến.
+  - Weighted ưu tiên sản phẩm giá trị cao, làm thay đổi top products.
 
-- **Luật có giá trị kinh doanh cao**: Không quan sát được do thiếu weighted rules, nhưng trong luật thường, luật với lift >2.0 ít hơn, cho thấy chúng chặt chẽ hơn.
+- **Luật có giá trị kinh doanh cao** (ghi chú: Xem notebook cell 14):
+  - Lọc luật với lift >2.0 và confidence >0.5. Weighted rules có thể có ít luật hơn nhưng chất lượng cao hơn.
 
 ## Ngưỡng Hợp Lý Đề Xuất
 
 ### Cho Khai Thác Hành Vi Mua Phổ Biến
 - **Mục tiêu**: Tìm nhiều luật để hiểu pattern mua sắm chung.
-- **Ngưỡng đề xuất**:
+- **Ngưỡng đề xuất** (dựa trên notebook cell 16):
   - min_support: 0.02 (cân bằng giữa số lượng và ý nghĩa)
   - min_confidence: 0.2
   - min_lift: 1.2
-- **Lý do**: Support thấp tạo ~3500 luật, đủ để phân tích mà không quá ồn.
+- **Lý do**: Support thấp tạo ~2,500 luật, đủ để phân tích mà không quá ồn.
 
 ### Cho Tối Đa Hóa Giá Trị/Doanh Thu
 - **Mục tiêu**: Tập trung vào luật mạnh, có giá trị cao.
+- **Ngưỡng đề xuất cho luật có trọng số** (dựa trên notebook cell 18):
+  - min_weighted_support: 0.05
+  - min_weighted_lift: 1.5
 - **Ngưỡng đề xuất cho luật thường**:
   - min_support: 0.05
   - min_confidence: 0.3
   - min_lift: 1.5
-- **Ngưỡng đề xuất cho luật có trọng số** (dự kiến):
-  - min_weighted_support: 0.05
-  - min_weighted_lift: 1.5
-- **Lý do**: Ngưỡng cao hơn lọc ra luật chất lượng, nhưng cần weighted để ưu tiên giá trị.
+- **Lý do**: Ngưỡng cao hơn lọc ra luật chất lượng, weighted ưu tiên giá trị kinh doanh.
 
 ## Công Cụ Và Thư Viện Sử Dụng
 - **Python**: Ngôn ngữ chính.
 - **mlxtend**: Cho Apriori và association_rules.
-- **apyori**: Cho weighted Apriori (nhưng hạn chế).
+- **apyori**: Cho weighted Apriori với tính toán thủ công.
 - **pandas, numpy**: Xử lý dữ liệu.
-- **matplotlib, seaborn**: Trực quan hóa.
+- **matplotlib, seaborn**: Trực quan hóa (ghi chú: Sử dụng trong notebook cell 12 để vẽ biểu đồ).
 - **Jupyter Notebook**: Thực hiện và ghi chép.
 
 ## Kết Luận Và Khuyến Nghị
-Phân tích độ nhạy cho thấy min_support là tham số quan trọng nhất, ảnh hưởng trực tiếp đến số lượng luật. Luật thường hiệu quả cho dữ liệu này, tạo ra insights về sản phẩm phổ biến. Luật có trọng số cần cải thiện triển khai để tận dụng giá trị kinh doanh.
+Phân tích độ nhạy cho thấy min_support là tham số quan trọng nhất. Luật thường hiệu quả cho hành vi phổ biến, luật có trọng số cho giá trị kinh doanh. Kết quả từ notebook cho thấy weighted rules ít hơn nhưng tập trung hơn.
 
-Khuyến nghị: Sử dụng ngưỡng đề xuất dựa trên mục tiêu. Cho tương lai, thu thập dữ liệu transactions lớn hơn hoặc triển khai weighted metrics (ví dụ, sử dụng trọng số trong confidence và lift).
+Khuyến nghị: Sử dụng ngưỡng đề xuất. Thêm biểu đồ trực quan như heatmap cho tương quan tham số (có thể mở rộng notebook). Cho tương lai, thu thập dữ liệu transactions lớn hơn để tăng pairs trong weighted rules.
