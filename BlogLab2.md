@@ -152,3 +152,5 @@ bao gồm các sản phẩm
 **Đề xuất 4:** Bán combo WOODEN CHRISTMAS SCANDINAVIAN khi gần Giáng sinh 
 
 - Combo WOODEN CHRISTMAS SCANDINAVIAN: HEART + STAR + TREE
+## . Slide trình bày
+- Link Slide: https://docs.google.com/presentation/d/1YnT40HQFyWtmcSM3J1jH3IhZLIjqW-JbyjyOm7FCJEM/edit?usp=sharing
